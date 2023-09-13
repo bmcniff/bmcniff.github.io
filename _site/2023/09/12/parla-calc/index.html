@@ -5,9 +5,9 @@
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
 
-  <title>Welcome to Jekyll!</title>
-  <meta name='description' content="You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different wa...">
-  <link rel='canonical' href="http://localhost:4000/2018/02/05/welcome-to-jekyll/">
+  <title>First Test Post</title>
+  <meta name='description' content="Roll a die with 20 sides.">
+  <link rel='canonical' href="http://localhost:4000/2023/09/12/parla-calc/">
   <link rel='alternate' type='application/rss+xml' title='Brian McNiff - Project Portfolio' href="http://localhost:4000/feed.xml">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Volkhov:400,700" rel="stylesheet">
@@ -80,25 +80,85 @@
     </header>
     <div class="c-wrap-content">
       <header class="c-article__header">
-        <h1 class="c-article__title">Welcome to Jekyll!</h1>
+        <h1 class="c-article__title">First Test Post</h1>
         <div class="c-article__date">
-          <span>2018, Feb 05</span>
+          <span>2023, Sep 12</span>
         </div>
       </header>
-      <p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+      <p>Roll a die with 20 sides.</p>
 
-<p>To add new posts, simply add a file in the <code class="language-plaintext highlighter-rouge">_posts</code> directory that follows the convention <code class="language-plaintext highlighter-rouge">YYYY-MM-DD-name-of-post.ext</code> and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
+<p>The number rolled determines which secret cocktail you’ll receive. […]</p>
 
-<p>Jekyll also offers powerful support for code snippets:</p>
+<p>You may re-roll if you land on something you rolled before, but rolling [any repeat] 3 times in a row means you get that number regardless. […]</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
+<p><img src="https://images.squarespace-cdn.com/content/v1/623506f9b920e800d3ca41c2/85dcaaea-ecd0-4bcd-a38c-2ea70a61e290/DM.png?format=2500w" width="300" /></p>
 
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+<p>[\sum_{i=1}^{20}\frac{1}{1-(1-(\frac{(20-i)}{20})^3)}]</p>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Change equation to eq^-1 instead of 1/eq
+</span>
+<span class="c1"># Theoretical
+</span><span class="k">def</span> <span class="nf">prob_of_new_number</span><span class="p">(</span><span class="n">n_already_rolled</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="mi">20</span> <span class="o">-</span> <span class="n">n_already_rolled</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">))</span><span class="o">**</span><span class="mi">3</span>
+
+<span class="n">expected_trials</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+    <span class="n">expected_trials</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="nf">prob_of_new_number</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Expected number of trials: {}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">expected_trials</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Expected number of trials: 33.860100253714165
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Simulation
+</span><span class="kn">import</span> <span class="n">random</span>
+<span class="kn">import</span> <span class="n">math</span>
+<span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="n">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">random</span><span class="p">.</span><span class="nf">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">outcomes</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">run_sim</span><span class="p">():</span>
+    <span class="n">numbers_already_rolled</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tries_left</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">number_of_trials</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">while</span> <span class="nf">len</span><span class="p">(</span><span class="n">numbers_already_rolled</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="n">current_roll</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="nf">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_roll</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">numbers_already_rolled</span><span class="p">:</span>
+            <span class="n">numbers_already_rolled</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">current_roll</span><span class="p">)</span>
+            <span class="n">tries_left</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">number_of_trials</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">tries_left</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">tries_left</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tries_left</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">number_of_trials</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="k">return</span> <span class="n">number_of_trials</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">500000</span><span class="p">):</span>
+    <span class="n">outcomes</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nf">run_sim</span><span class="p">())</span>
+    
+<span class="n">discrete_trials</span> <span class="o">=</span> <span class="n">math</span><span class="p">.</span><span class="nf">ceil</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nf">mean</span><span class="p">(</span><span class="n">outcomes</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Mean expected trials: {}</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">discrete_trials</span><span class="p">))</span>
+<span class="nf">print</span><span class="p">(</span><span class="sh">'</span><span class="s">Total cost ($16 per drink, plus tip and tax): ${})</span><span class="sh">'</span><span class="p">.</span><span class="nf">format</span><span class="p">(</span><span class="n">discrete_trials</span> <span class="o">*</span> <span class="mi">16</span> <span class="o">*</span> <span class="mf">1.26</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="p">.</span><span class="nf">hist</span><span class="p">(</span><span class="n">outcomes</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Mean expected trials: 34
+Total cost ($16 per drink, plus tip and tax): $685.44)
+</code></pre></div></div>
+
+<p><img src="../../../../images/Parla_Calc_4_1.png" alt="png" /></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code></pre></div></div>
 
     </div> <!-- /.c-wrap-content -->
   </div> <!-- /.c-article__content -->

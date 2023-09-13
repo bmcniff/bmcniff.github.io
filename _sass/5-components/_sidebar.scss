@@ -79,8 +79,8 @@
 .c-sidebar-footer {
   .c-social__title {
     position: relative;
-    font-family: 'Volkhov', serif;
-    font-size: 15px;
+    font-family: 'Open-Sans', sans-serif;
+    font-size: 18px;
     font-weight: 700;
     color: $white_color;
     &::before {
@@ -112,12 +112,12 @@
     margin: 15px 0;
     .c-social__item {
       display: inline-block;
-      width: 27px;
+      width: 47px;
       height: 27px;
     }
     .icon {
-      width: 27px;
-      height: 27px;
+      width: 37px;
+      height: 37px;
       fill: $white_color;
       vertical-align: middle;
       transition: $global-transition;
