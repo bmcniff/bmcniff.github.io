@@ -5,7 +5,7 @@
 .c-sidebar {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   position: fixed;
   top: 0;
   left: 0;
@@ -14,10 +14,11 @@
   padding: 40px 20px 20px;
   text-align: center;
   box-shadow: 1px 1px 0 rgba(31, 35, 46, 0.15);
-  background-color: $white-color;
+  background-color: #252A34;
 }
 
 .c-sidebar-author {
+  text-align: left;
   .c-author__cover {
     width: 100px;
     height: 100px;
@@ -50,13 +51,15 @@
     font-family: 'Volkhov', serif;
   }
   .c-author__name {
-    font-size: 18px;
+    color: $white-color;
+    font-size: 68px;
     font-weight: 700;
-    line-height: 21px;
+    line-height: 69px;
+    margin: 0 auto 15px;
   }
   .c-author__job {
-    font-size: 12px;
-    color: $gray;
+    font-size: 22px;
+    color: $white_color;
     margin: 5px 0 0;
   }
   .c-contact-menu {
@@ -66,9 +69,10 @@
     }
   }
   .c-author__about {
+    color: $white-color;
     max-width: 400px;
-    margin: 0 auto 15px;
-    font-size: 13px;
+    margin: 0 auto 20px;
+    font-size: 23px;
   }
 }
 
@@ -78,7 +82,7 @@
     font-family: 'Volkhov', serif;
     font-size: 15px;
     font-weight: 700;
-    color: $darkest;
+    color: $white_color;
     &::before {
       content: "";
       display: block;
@@ -88,7 +92,7 @@
       position: absolute;
       top: 50%;
       left: 0;
-      background-color: $darkest;
+      background-color: $white_color;
     }
     &::after {
       content: "";
@@ -99,7 +103,7 @@
       position: absolute;
       top: 50%;
       right: 0;
-      background-color: $darkest;
+      background-color: $white_color;
     }
   }
   .c-social__list {
@@ -114,11 +118,11 @@
     .icon {
       width: 27px;
       height: 27px;
-      fill: $darkest;
+      fill: $white_color;
       vertical-align: middle;
       transition: $global-transition;
       &:hover {
-        fill: $primary-color;
+        fill: $white-color;
         transform: scale(1.2);
         transition: $global-transition;
       }
@@ -126,6 +130,7 @@
   }
   .c-copyright {
     p {
+      Color: $white_color;
       font-size: 13px;
       margin: 0;
     }
@@ -189,6 +194,7 @@
     .c-social__list {
       margin: 0;
       .icon {
+        fill: $white_color;
         width: 25px;
         height: 25px;
       }

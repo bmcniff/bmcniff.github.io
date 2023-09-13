@@ -44,7 +44,7 @@
       margin: 0 0 15px;
       a {
         text-decoration: none;
-        color: $blue-dark;
+        color: #252A34;
       }
     }
     .c-post-date,
@@ -60,10 +60,10 @@
   font-size: 13px;
   color: $white-color;
   border: none;
-  background-color: $primary-color;
+  background-color: #252A34;
   outline: none;
   &:hover {
-    background-color: darken($primary-color, 15%);
+    background-color: darken(#252A34, 15%);
   }
 }
 
