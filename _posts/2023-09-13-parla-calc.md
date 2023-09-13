@@ -15,7 +15,9 @@ You may re-roll if you land on something you rolled before, but rolling [any rep
 
 <img src="https://images.squarespace-cdn.com/content/v1/623506f9b920e800d3ca41c2/85dcaaea-ecd0-4bcd-a38c-2ea70a61e290/DM.png?format=2500w" width="300"/>
 
-$$\sum_{i=1}^{20}\frac{1}{1-(1-(\frac{(20-i)}{20})^3)}$$
+\begin{equation}
+\sum_{i=1}^{20}\frac{1}{1-(1-(\frac{(20-i)}{20})^3)}
+\end{equation}
 
 ``` python
 # Change equation to eq^-1 instead of 1/eq

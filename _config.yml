@@ -32,6 +32,7 @@ disqus-identifier:  # Add your shortname for Disqus Comment. For example mr-brow
 
 # Build settings
 markdown: kramdown
+math_engine: mathjax
 permalink: /:year/:month/:day/:title/
 plugins:
   - jekyll-paginate
