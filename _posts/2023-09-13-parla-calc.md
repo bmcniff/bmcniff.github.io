@@ -2,7 +2,7 @@
 layout: post
 title: "Crafting Cocktails, Calculating Odds"
 date: 2023-09-12 15:13:18 +0200
-image: 12.jpg
+image: 13.jpg
 tags: [jekyll, docs]
 categories: jekyll
 ---
