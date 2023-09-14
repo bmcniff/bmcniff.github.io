@@ -1,51 +1,97 @@
 ---
 layout: post
-title: "First Test Post"
+title: "Crafting Cocktails, Calculating Odds"
 date: 2023-09-12 15:13:18 +0200
 image: 12.jpg
 tags: [jekyll, docs]
 categories: jekyll
 ---
 
-Roll a die with 20 sides.
-
-The number rolled determines which secret cocktail you'll receive. [...]
-
-You may re-roll if you land on something you rolled before, but rolling [any repeat] 3 times in a row means you get that number regardless. [...]
+There is a bar in my neighborhood with an interesting premise. One of the pages on their menu states the following:
 
 <img src="https://images.squarespace-cdn.com/content/v1/623506f9b920e800d3ca41c2/85dcaaea-ecd0-4bcd-a38c-2ea70a61e290/DM.png?format=2500w" width="300"/>
 
+To summarize:
+
+"Roll a die with 20 sides."
+
+"The number rolled determines which secret cocktail you'll receive. [...]"
+
+"You may re-roll if you land on something you rolled before, but rolling [any repeat] 3 times in a row means you get that number regardless. [...]"
+
+I remember reading this and immediately being curious about the expected number of drinks one would have to buy to complete this list. Doing some research, I found a puzzle in probability theory called [The Coupon Collector's Problem](https://en.wikipedia.org/wiki/Coupon_collector%27s_problem), which presented a very similar question: "Given n coupons, how many coupons do you expect you need to draw with replacement before having drawn each coupon at least once?"
+
+The good news is that there is an equation to solve this:
+
 \begin{equation}
-\sum_{i=1}^{20}\frac{1}{1-(1-(\frac{(20-i)}{20})^3)}
+\sum_{i=1}^{n}\frac{1}{\frac{(n-i)}{n}}
+\end{equation}
+<p style="text-align: center;">(where n = number of unique coupons)</p>
+
+Let's break this down and start simple with the innermost part, which gives us the probability of getting a new coupon when we've already got <i>i</i> out of <i>n</i> coupons:
+
+\begin{equation}
+\frac{(n-i)}{n}
 \end{equation}
 
-``` python
-# Change equation to eq^-1 instead of 1/eq
+For example if we've already got <b><i>i = 15</i></b> out of a total <b><i>n = 20</i></b>, then we can expect a 25% chance of getting a new number on our next pull. We can also express the expected number of attempts as the inverse of this probability:
 
-# Theoretical
+\begin{equation}
+\frac{1}{\frac{(n-i)}{n}}
+\end{equation}
+
+In our case of <b><i>i = 15</i></b>, it would take an average 1.33 times (20/15) to get a new number. From here we can just sum all of the numbers we would need, which would be 1 through <b><i>n</i></b>:
+
+\begin{equation}
+\sum_{i=1}^{n}\frac{1}{\frac{(n-i)}{n}}
+\end{equation}
+
+We're now close to the equation we'd need, but with one complication - we have three attempts on each trial to get a new drink (or coupon). To calculate this, we'll need to figure out the probability of <i>not</i> getting  a new number in three rolls, and take the compliment of that, which can be done as follows:
+
+\begin{equation}
+{1-(1-(\frac{(n-i)}{n}))^3}
+\end{equation}
+
+We can now replace our original term in the denominator with this new one, and we have our equation!
+
+\begin{equation}
+\sum_{i=1}^{n}\frac{1}{1-(1-(\frac{(n-i)}{n}))^3}
+\end{equation}
+
+Let's code this up in Python so we can try experimenting with it a bit. We'll start with writing a function to calculate the probability of getting your <i>i<sup>th</sup></i> drink on the next roll.
+
+
+```python
 def prob_of_new_number(n_already_rolled):
     return 1 - (1 - ((20 - n_already_rolled)/20))**3
+```
 
+From here we can iterate through each number one would need to complete their card (1-20). By taking the sum of the reciprocals we get the total number of drinks on average that would be required to complete this challenge.
+
+
+```python
 expected_trials = []
 
 for i in range(20):
     expected_trials.append(1/prob_of_new_number(i))
 
-print('Expected number of trials: {}'.format(sum(expected_trials)))
+print('Expected number of trials: {:.1f}'.format(sum(expected_trials),1))
 ```
 
-    Expected number of trials: 33.860100253714165
+    Expected number of trials: 33.9
 
-``` python
-# Simulation
+
+This number surprised me, my guess was closer to 50 while building this out. 
+
+As a sanity check, let's also build out a script that simulates customers, each of which rolls for every number and tracks their progress. This will be completely independent from the equation above, so we hope to see a similar number.
+
+
+```python
 import random
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 
 random.seed(1)
-
-outcomes = []
 
 def run_sim():
     numbers_already_rolled = []
@@ -65,22 +111,51 @@ def run_sim():
             number_of_trials += 1
     
     return number_of_trials
+```
 
-for _ in range(500000):
-    outcomes.append(run_sim())
+Let's run this for 100,000 simulated customers and see where we land.
+
+
+```python
+outcomes = []
+
+for _ in range(100000):
+    outcomes.append(run_sim()) 
     
-discrete_trials = math.ceil(np.mean(outcomes))
-print('Mean expected trials: {}'.format(discrete_trials))
-print('Total cost ($16 per drink, plus tip and tax): ${})'.format(discrete_trials * 16 * 1.26))
+sim_number_of_trials = np.mean(outcomes)
+print('Mean expected trials: {:.1f}'.format(sim_number_of_trials))
+```
 
-plt.hist(outcomes, bins=20)
+    Mean expected trials: 33.9
+
+
+Looks spot on! It's good to see we're hitting 33.9 (realistically 34) with both strategies. Also curious to see what the distribution looks like here.
+
+
+```python
+import matplotlib.pyplot as plt
+plt.hist(outcomes, bins=20, color='#05D9D6') 
 plt.show()
 ```
 
-    Mean expected trials: 34
-    Total cost ($16 per drink, plus tip and tax): $685.44)
 
-![png](../../../../images/Parla_Calc_4_1.png)
+    
+![png](../../../../images/Parla_Calc_11_0.png)
+    
 
-``` python
+
+Some lucky individuals managed to get all 20 within 25 attempts! Alternatively, some poor souls are still waiting to get all 20 drinks at their 80th attempt, yikes.
+
+Lastly, it would be great to know how much money this experience is expected to cost over time. To be thorough, we'll also include the MA state tax of 6.25% and a 20% tip.
+
+
+```python
+print('Total cost ($16 per drink, plus tip and tax): ${:.2f}'.format(math.ceil(sim_number_of_trials) * 16 * 1.2625))
 ```
+
+    Total cost ($16 per drink, plus tip and tax): $686.80
+
+
+There we have it! One can expect to spend $686.80 on average to complete this. I'll leave it to the reader whether or not to consider this financially responsible, although access to a secret menu afterwards makes this all the more tempting.
+
+If you're interested in experimenting with any of this code (perhaps to figure out how many attempts you'd need to get your last unique drink?), I've also created a Colab notebook for ease of access.
