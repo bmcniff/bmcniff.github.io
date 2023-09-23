@@ -7,6 +7,8 @@ tags: [jekyll, docs]
 categories: jekyll
 ---
 
+*An unsupervised approach to classifying food delivery reviews*
+
 ### Overview
 
 My goal for this project is to implement text classification for

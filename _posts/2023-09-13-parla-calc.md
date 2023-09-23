@@ -7,6 +7,8 @@ tags: [jekyll, docs]
 categories: jekyll
 ---
 
+*Exploring the probability of an unconventional menu item.*
+
 There is a bar in my neighborhood with an interesting premise. One of the pages on their menu states the following:
 
 <img src="https://images.squarespace-cdn.com/content/v1/623506f9b920e800d3ca41c2/85dcaaea-ecd0-4bcd-a38c-2ea70a61e290/DM.png?format=2500w" width="300"/>
