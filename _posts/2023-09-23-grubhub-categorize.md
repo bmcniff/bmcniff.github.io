@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Flavorful Feedback: Grading and Grouping Customer Reviews"
+title: "Classifying Food Feedback"
 date: 2023-09-23 15:13:18 +0200
-image: 14.jpg
+image: 14.png
 tags: [jekyll, docs]
 categories: jekyll
 ---
