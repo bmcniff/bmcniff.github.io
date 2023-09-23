@@ -7,7 +7,7 @@ tags: [jekyll, docs]
 categories: jekyll
 ---
 
-*An unsupervised approach to classifying food delivery reviews*
+*An unsupervised approach to classifying food delivery reviews.*
 
 ### Overview
 
