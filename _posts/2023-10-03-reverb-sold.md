@@ -7,7 +7,7 @@ tags: [jekyll, docs]
 categories: jekyll
 ---
 
-*Predicting whether musical instruments will sell on online marketplace.*
+*Predicting whether music gear will sell on an online marketplace.*
 
 ### Overview
 
@@ -481,8 +481,6 @@ X.iloc[:,included_features]
 included_features_init = included_features
 ```
 
-<div>
-
 |      | inventory | shop.rating_percentage | price.amount | shipping.user_region_rate.rate.amount | original_price.amount | price_drop_percent | len_title | num_photos | days_to_return_int | offers_enabled_True |
 |-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 | 0    | 1         | 0.996569               | 1529.99      | 0.00                                  | 1529.99               | 0.000000           | 68        | 11         | 30                 | 0                   |
@@ -497,13 +495,7 @@ included_features_init = included_features
 | 2049 | 0         | 0.997531               | 1199.00      | 36.00                                 | 1264.00               | 0.051424           | 86        | 8          | 1                  | 0                   |
 | 2050 | 0         | 0.996819               | 1299.00      | 45.00                                 | 1299.00               | 0.000000           | 54        | 11         | 30                 | 1                   |
 
-<p>
-
 2051 rows × 10 columns
-
-</p>
-
-</div>
 
 Immediately after seeing this, I realized that inventory is likely our
 culprit. It stands to reason that a seller often has only one of these
@@ -631,15 +623,11 @@ def train_and_score(X_train, y_train, X_val, y_val):
 train_and_score(X_train, y_train, X_val, y_val)
 ```
 
-<div>
-
 |     | model               | train    | val      | val_conf_matrix        |
 |-----|---------------------|----------|----------|------------------------|
 | 0   | logistic regression | 0.801926 | 0.804124 | [[120, 39], [56, 195]] |
 | 1   | random forest       | 0.999341 | 0.928287 | [[141, 18], [18, 233]] |
 | 2   | xgboost             | 0.999340 | 0.930140 | [[142, 17], [18, 233]] |
-
-</div>
 
 Again we see some good news that random forest and xgboost classifiers
 perform even better than our logistic regression model. In this case,
