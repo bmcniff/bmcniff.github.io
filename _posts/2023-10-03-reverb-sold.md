@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Making a Sound Investment"
-date: 2023-10-04 15:13:18 +0200
+date: 2023-10-03 15:13:18 +0200
 image: 16.png
 tags: [jekyll, docs]
 categories: jekyll
