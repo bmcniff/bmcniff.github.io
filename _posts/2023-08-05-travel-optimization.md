@@ -187,7 +187,7 @@ location_combos_df[['name_x', 'address_x', 'name_y', 'address_y', 'distances_ft'
 
 ### Creating the Solver and Optimizing Routes
 
-For the optimization portion of this project, I'm using Google's [OR-Tools](https://developers.google.com/optimization) suite of optimization engines. There are two main reasons for this. First, I'm familiar with the OR-Tools workflow so I should be able to iterate quickly. Second, OR-Tools includes a routing engine specifically designed for vehicle routing which be perfect for what we're trying to accomplish here!
+For the optimization portion of this project, I'm using Google's [OR-Tools](https://developers.google.com/optimization) suite of optimization engines. There are two main reasons for this. First, I'm familiar with the OR-Tools workflow so I should be able to iterate quickly. Second, OR-Tools includes a routing engine specifically designed for vehicle routing which will be perfect for what we're trying to accomplish here!
 
 The routing tools require an n x n matrix of distances (n = number of locations), which we create next. We add this to a dictionary along with the length of our trip in days, and the index of the origin which is the index of our hotel. In my case the hotel is the first location in the list, so the origin is 0.
 
@@ -378,4 +378,4 @@ Hypothetically speaking, if this were an unrealistic route, I think a good appro
 
 There are of course a few drawbacks to this model due to its simplicity. Namely, the model does not factor in time spent at each location, and makes no attempt to chose activities based on time of day (for example, its possible two restaurants could be put back to back.) This could absolutely be solved with the addition of a couple more constraints. If I find myself coming back to this project in the future, I think this would be the best place to invest more time.
 
-That being said, I'm looking forward to trying this out on new datasets. This should be as simple as updating the city coordinates and inputting a new set of activities. If you're interested in trying this for yourself, feel free to take a look at the Google Colab notebook here.
+That being said, I'm looking forward to trying this out on new datasets. This should be as simple as updating the city coordinates and inputting a new set of activities. If you're interested in trying this for yourself, feel free to take a look at the repo available [here](https://bmcniff.github.io/2023/08/05/travel-optimization/).

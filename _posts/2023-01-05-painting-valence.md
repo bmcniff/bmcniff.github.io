@@ -252,7 +252,7 @@ Reviewing the F1 score for our test data (0.949), its clear that our model is pe
 
 ### Conclusion
 
-As a final step, I withheld a couple of examples from all partitions to see this model working in action. I'm very excited to see this model performing as well as it does and already have some additional ideas for some similar projects in the future. If you'd like to experiment with this on your own, please check out the repo for this project here.
+As a final step, I withheld a couple of examples from all partitions to see this model working in action. I'm very excited to see this model performing as well as it does and already have some additional ideas for some similar projects in the future. If you'd like to experiment with this on your own, please check out the repo for this project [here](https://bmcniff.github.io/2023/01/05/painting-valence/).
 
 ``` python
 def predict_valence(file_path):

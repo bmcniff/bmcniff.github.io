@@ -11,42 +11,20 @@ categories: jekyll
 
 ### Overview
 
-My goal for this project is to implement text classification for
-restaurant reviews on Grubhub to understand whether the review is about
-the food or the delivery experience. In the past, I've noticed that many
-of the bad reviews on platforms like these are actually due to a bad
-delivery experience, which is often not the fault of the restaurant. For
-small businesses, this handful of bad reviews can be a detriment to
-their success on a platform like Grubhub, Doordash, or Uber Eats.
+My goal for this project is to implement text classification for restaurant reviews on Grubhub to understand whether the review is about the food or the delivery experience. In the past, I've noticed that many of the bad reviews on platforms like these are actually due to a bad delivery experience, which is often not the fault of the restaurant. For small businesses, this handful of bad reviews can be a detriment to their success on a platform like Grubhub, Doordash, or Uber Eats.
 
-Additionally, as a customer, I would value the ability to understand how
-a restaurant scores across multiple categories, not just in aggregate.
+Additionally, as a customer, I would value the ability to understand how a restaurant scores across multiple categories, not just in aggregate.
 
-One aspect of this project I was very curious about was whether I'd be
-able to generate predictions using an unsupervised approach. In this
-case, since I am scraping reviews from Grubhub myself, I would also need
-to label the data, which is unrealistic across a sample size this large.
+One aspect of this project I was very curious about was whether I'd be able to generate predictions using an unsupervised approach. In this case, since I am scraping reviews from Grubhub myself, I would also need to label the data, which is unrealistic across a sample size this large.
 
-After some research, I came across
-[Lbl2Vec](https://github.com/sebischair/Lbl2Vec) which provides "an
-algorithm for unsupervised document classification and unsupervised
-document retrieval". Sounds like exactly what I need! Lbl2Vec works by
-referencing a list of predefined categories, the sample text, and its
-understanding of language/similarities between words. Using these
-components, the algorithm can decide which category is most appropriate
-for the sample text.
+After some research, I came across [Lbl2Vec](https://github.com/sebischair/Lbl2Vec) which provides "an
+algorithm for unsupervised document classification and unsupervised document retrieval". Sounds like exactly what I need! Lbl2Vec works by referencing a list of predefined categories, the sample text, and its understanding of language/similarities between words. Using these components, the algorithm can decide which category is most appropriate for the sample text.
 
 ### Data Collection/Cleansing
 
-Using a combination of Beautiful Soup, Selenium, and the WebScraper web
-extension, I pulled reviews from 50 restaurants in my area, with a total
-of about 8,500 reviews. Based on my past experience, this is a small
-data set to use for NLP, but I wanted to start with a simple baseline to
-understand if this was viable.
+Using a combination of Beautiful Soup, Selenium, and the WebScraper web extension, I pulled reviews from 50 restaurants in my area, with a total of about 8,500 reviews. Based on my past experience, this is a small data set to use for NLP, but I wanted to start with a simple baseline to understand if this was viable.
 
-It is worth noting as well that I did spend about 20 minutes manually
-labeling roughly 300 randomly selected reviews with categories in order
-to evaluate model accuracy.
+It is worth noting as well that I did spend about 20 minutes manually labeling roughly 300 randomly selected reviews with categories in order to evaluate model accuracy.
 
 ``` python
 from lbl2vec import Lbl2Vec
@@ -90,16 +68,9 @@ def parse_reviews(csv_file_path):
 corpus = parse_reviews('/Users/brianmcniff/Downloads/grubhub_reviews.csv')
 ```
 
-In addition to text data, Lbl2Vec also requires a manually specified
-list of categories. As shown below, each category is actually defined by
-its keywords. In my opinion, tweaking these categories ended up being
-the most interesting part of the project, and will get in to details
-later.
+In addition to text data, Lbl2Vec also requires a manually specified list of categories. As shown below, each category is actually defined by its keywords. In my opinion, tweaking these categories ended up being the most interesting part of the project, and will get in to details later.
 
-For this project, I decided a good goal was to determine whether a
-review was about the quality of the food, the delivery experience, or
-the accuracy of the order, and did my best to come up with some relevant
-words using out of sample reviews as inspiration.
+For this project, I decided a good goal was to determine whether a review was about the quality of the food, the delivery experience, or the accuracy of the order, and did my best to come up with some relevant words using out of sample reviews as inspiration.
 
 ``` python
 #dict of manually specified category/tag pairs
@@ -122,19 +93,9 @@ labels = parse_labels(labels_dict)
 
 ### Making Predictions
 
-At this point, we have all of the data we'll need to make predictions. I
-found a very helpful
-[article](https://towardsdatascience.com/unsupervised-text-classification-with-lbl2vec-6c5e040354de)
-published by the creator of the library, which runs through a simple
-demonstration. I used this as a jumping off point to create a function
-which tokenizes and tags documents, as well as a function which tests
-the model on our manually tagged data set to understand how well it
-performs.
+At this point, we have all of the data we'll need to make predictions. I found a very helpful [article](https://towardsdatascience.com/unsupervised-text-classification-with-lbl2vec-6c5e040354de) published by the creator of the library, which runs through a simple demonstration. I used this as a jumping off point to create a function which tokenizes and tags documents, as well as a function which tests the model on our manually tagged data set to understand how well it performs.
 
-My goal in keeping each of these steps of the process modularized is to
-enable quick and easy iteration, as I suspect model tuning will be an
-significant part of this process. Let's try running this and see how our
-first attempt goes.
+My goal in keeping each of these steps of the process modularized is to enable quick and easy iteration, as I suspect model tuning will be an significant part of this process. Let's try running this and see how our first attempt goes.
 
 ``` python
 def tokenize_and_tag(corpus):
@@ -182,24 +143,11 @@ test_and_score(Lbl2Vec_model, corpus[corpus['data_set_type']=='test'])
 
 ### Initial Results and Tuning
 
-I'd interpret this an a rather mediocre F1 score (its worth noting that
-since we have three classes, random guessing would be \~33%). It's clear
-to me that "delivery" (second row) predictions are performing the
-strongest, while "order accuracy" (first row) predictions are rather
-poor. Typically I would assume this would be due to class imbalance in
-the training data, but here its difficult to know that due to the
-unsupervised nature of this algorithm, and the absence of labeled data.
-It looks like a lot of the "food quality" reviews are being interpreted
-as "delivery" so I'll be keeping an eye on this throughout the
-hyperparameter tuning process as well.
+I'd interpret this an a rather mediocre F1 score (its worth noting that since we have three classes, random guessing would be \~33%). It's clear to me that "delivery" (second row) predictions are performing the strongest, while "order accuracy" (first row) predictions are rather poor. Typically I would assume this would be due to class imbalance in the training data, but here its difficult to know that due to the unsupervised nature of this algorithm, and the absence of labeled data. It looks like a lot of the "food quality" reviews are being interpreted as "delivery" so I'll be keeping an eye on this throughout the hyperparameter tuning process as well.
 
-I also want to tweak the keywords a bit to hopefully nudge some of the
-"food quality" and "accuracy" examples into the correct category, though
-I suspect that will come as a trade off to overall accuracy.
+I also want to tweak the keywords a bit to hopefully nudge some of the "food quality" and "accuracy" examples into the correct category, though I suspect that will come as a trade off to overall accuracy.
 
-After a bit of experimenting, I found that running this model at 50
-epochs allowed for a good trade off between accuracy and time, so I'll
-test a few parameters at 50 epochs and see what we find.
+After a bit of experimenting, I found that running this model at 50 epochs allowed for a good trade off between accuracy and time, so I'll test a few parameters at 50 epochs and see what we find.
 
 ``` python
 vector_size_options = [200, 300, 400]
@@ -234,35 +182,17 @@ scores.sort_values('F1 Score', ascending=False)
 
 ### Hyperparameter Tuning
 
-It looks like our best combination of parameters is: - vector_size =
-300 - min_count = 20 - window = 15 - similarity_threshold=0.8
+It looks like our best combination of parameters is: - vector_size = 300 - min_count = 20 - window = 15 - similarity_threshold=0.99
 
-This provided an F1 score of 0.72. While this is a large improvement,
-it's still not incredible, however I am happy to see that each category
-is being predicted correctly for a majority of examples:
+This provided an F1 score of 0.72. While this is a large improvement, it's still not incredible, however I am happy to see that each category is being predicted correctly for a majority of examples:
 
     array([[ 27,   9,   5],
            [ 12,  52,   9],
            [ 33,  14, 110]]))
 
-It's worth mentioning that I do feel a little hesitant to follow this
-completely for a few reasons. I'm noticing after seeing many iterations
-of this model that the F1 score is very volatile. Even running the same
-model with the exact same parameters can swing by 5% each time. I've put
-some time into troubleshooting this by specifying random and
-numpy.random seeds, but it looks as though the non-deterministic
-properties of this algorithm are due to a different library. This makes
-hyperparameter tuning a bit unreliable.
+It's worth mentioning that I do feel a little hesitant to follow this completely for a few reasons. I'm noticing after seeing many iterations of this model that the F1 score is very volatile. Even running the same model with the exact same parameters can swing by 5% each time. I've put some time into troubleshooting this by specifying random and numpy.random seeds, but it looks as though the non-deterministic properties of this algorithm are due to a different library. This makes hyperparameter tuning a bit unreliable.
 
-Alternatively, what I have found helpful is tweaking the keywords used
-to define the categories. I have noticed consistent improvements by
-choosing less keywords for each category and ensuring the keywords are
-both related to the category AND not related to any of the others. This
-is critical because of the homogeneity of our vocabulary (every data
-point is about food). This has been a really interesting component to
-work on as it feels rather unique compared to more traditional parts of
-the predictive modeling process. Here is the final list I ended up
-using:
+Alternatively, what I have found helpful is tweaking the keywords used to define the categories. I have noticed consistent improvements by choosing less keywords for each category and ensuring the keywords are both related to the category AND not related to any of the others. This is critical because of the homogeneity of our vocabulary (every data point is about food). This has been a really interesting component to work on as it feels rather unique compared to more traditional parts of the predictive modeling process. Here is the final list I ended up using:
 
 ``` python
 labels_dict = {
@@ -274,29 +204,13 @@ labels_dict = {
 labels = parse_labels(labels_dict)
 ```
 
-One last point I'd like to make is that it is not at all uncommon to see
-a review that mentions both or all three categories. While this model is
-outputting the single most relevant category right now, it also outputs
-the % match to each category meaning that with some tweaking, we could
-return any categories that cross a particular threshold, allowing for
-multiple tagged categories per review. Perhaps in a part 2 of this post.
-:)
+One last point I'd like to make is that it is not at all uncommon to see a review that mentions both or all three categories. While this model is outputting the single most relevant category right now, it also outputs the % match to each category meaning that with some tweaking, we could return any categories that cross a particular threshold, allowing for multiple tagged categories per review. Perhaps in a part 2 of this post. :)
 
 ### Visualizing Performance
 
-The last part of this project that I'm very interested in is visualizing
-a restaurant's performance across these three categories. Now that we
-can estimate which category a review is discussing, we just need an
-understanding of the restaurant's performance in that category. For this
-reason, I also pulled the star rating of each review. For example, we
-can assume that if a review is about delivery and is given 2 stars, the
-customer did not have a good delivery experience.
+The last part of this project that I'm very interested in is visualizing a restaurant's performance across these three categories. Now that we can estimate which category a review is discussing, we just need an understanding of the restaurant's performance in that category. For this reason, I also pulled the star rating of each review. For example, we can assume that if a review is about delivery and is given 2 stars, the customer did not have a good delivery experience.
 
-While we can likely communicate this information using a bar chart or
-box and whisker plot, I'm curious to see how this information can be
-visualized using a polar chart. Let's start by training the model one
-last time with our final parameters and keyword sets, and then make
-predictions across our entire data set.
+While we can likely communicate this information using a bar chart or box and whisker plot, I'm curious to see how this information can be visualized using a polar chart. Let's start by training the model one last time with our final parameters and keyword sets, and then make predictions across our entire data set.
 
 ``` python
 Lbl2Vec_model = Lbl2Vec(keywords_list=list(labels.keywords),
@@ -351,28 +265,10 @@ fig.show()
 
 ### Closing Thoughts
 
-There are a couple of things I notice with this visualization - the
-first is that it intuitively shows the overall quality of a restaurant,
-and allows one to compare overall qualities by comparing overall areas.
-However there are definitely many benefits that a traditional grouped
-bar chart would have over this. Regardless, it's interesting to see the
-data displayed in this way!
+There are a couple of things I notice with this visualization - the first is that it intuitively shows the overall quality of a restaurant, and allows one to compare overall qualities by comparing overall areas. However there are definitely many benefits that a traditional grouped bar chart would have over this. Regardless, it's interesting to see the data displayed in this way!
 
-It's been interesting to see that delivery scores are almost always the
-lowest, followed by accuracy, and then quality. This makes perfect sense
-to me as many people will have nothing to say if their order was on time
-and accurate. For this same exact reason, it was actually hard to find
-terms that were positive or neutral to include for delivery/accuracy
-keywords.
+It's been interesting to see that delivery scores are almost always the lowest, followed by accuracy, and then quality. This makes perfect sense to me as many people will have nothing to say if their order was on time and accurate. For this same exact reason, it was actually hard to find terms that were positive or neutral to include for delivery/accuracy keywords.
 
-Speaking about this model more generally, I'm very surprised to see the
-scores it's able to achieve given a small sample size, and what I think
-is a very difficult problem to solve - distinguishing between categories
-within a single topic. As next steps to improve this model, I would
-definitely invest more time in collecting data (likely an order of
-magnitude or more), revisit hyperparameter tuning, and perhaps rework
-the algorithm to output multiple categories where appropriate.
+Speaking about this model more generally, I'm very surprised to see the scores it's able to achieve given a small sample size, and what I think is a very difficult problem to solve - distinguishing between categories within a single topic. As next steps to improve this model, I would definitely invest more time in collecting data (likely an order of magnitude or more), revisit hyperparameter tuning, and perhaps rework the algorithm to output multiple categories where appropriate.
 
-For now though, I will leave this project here. If you're interested in
-running this code for restaurants near you, here is a Google Colab
-notebook with all of the code above.
+For now though, I will leave this project here. If you're interested in running this code for restaurants near you, [here](https://bmcniff.github.io/2023/07/28/grubhub-categorize/) is the repo with all of the code above.
