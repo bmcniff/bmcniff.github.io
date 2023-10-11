@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Classifying Food Feedback"
-date: 2023-09-23 15:13:18 +0200
+date: 2023-07-28 15:13:18 +0200
 image: 14.png
 tags: [jekyll, docs]
 categories: jekyll

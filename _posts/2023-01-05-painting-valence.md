@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "An AI Art Critic"
-date: 2023-09-15 15:13:18 +0200
+date: 2023-01-05 15:13:18 +0200
 image: 17.png
 tags: [jekyll, docs]
 categories: jekyll

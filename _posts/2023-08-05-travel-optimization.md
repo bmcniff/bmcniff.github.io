@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Travel Smarter, Not Harder"
-date: 2023-09-26 15:13:18 +0200
+date: 2023-08-05 15:13:18 +0200
 image: 15.png
 tags: [jekyll, docs]
 categories: jekyll
